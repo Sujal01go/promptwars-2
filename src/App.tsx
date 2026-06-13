@@ -187,7 +187,7 @@ function App() {
               onClick={() => setActiveTab('transit')}
             >
               <Navigation size={18} />
-              <span>Commute</span>
+              <span>Transit Sim</span>
             </button>
 
             <button 
@@ -195,7 +195,7 @@ function App() {
               onClick={() => setActiveTab('coach')}
             >
               <Bot size={18} />
-              <span>AI Coach</span>
+              <span>Eco AI Guide</span>
             </button>
 
             <button 
@@ -220,7 +220,7 @@ function App() {
           {showDemoBanner && (
             <div className="alert-info-banner" style={{ padding: '8px 12px', gap: '6px', fontSize: '11px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.15)' }}>
               <ShieldAlert size={14} style={{ flexShrink: 0 }} />
-              <span>Demo Presets Active</span>
+              <span>Educational Presets Active</span>
             </div>
           )}
 

@@ -69,7 +69,7 @@ export const DeveloperKeys: React.FC<DeveloperKeysProps> = ({ onClose }) => {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label className="slider-label" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <label htmlFor="gemini-key-input" className="slider-label" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <span>Google Gemini API Key</span>
               <a 
                 href="https://aistudio.google.com/" 
@@ -81,6 +81,7 @@ export const DeveloperKeys: React.FC<DeveloperKeysProps> = ({ onClose }) => {
               </a>
             </label>
             <input 
+              id="gemini-key-input"
               type="password" 
               className="form-group-input" 
               placeholder="AIzaSy..." 
@@ -99,7 +100,7 @@ export const DeveloperKeys: React.FC<DeveloperKeysProps> = ({ onClose }) => {
           </div>
 
           <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-            <label className="slider-label" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <label htmlFor="maps-key-input" className="slider-label" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <span>Google Maps API Key</span>
               <a 
                 href="https://console.cloud.google.com/" 
@@ -111,6 +112,7 @@ export const DeveloperKeys: React.FC<DeveloperKeysProps> = ({ onClose }) => {
               </a>
             </label>
             <input 
+              id="maps-key-input"
               type="password" 
               className="form-group-input" 
               placeholder="AIzaSy..." 

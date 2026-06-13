@@ -3,6 +3,9 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import React from 'react';
 
+// Mock scrollIntoView which is missing in JSDOM
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
 // Mock react-google-charts to render a simplified element instead of loading remote Google Visualization APIs
 vi.mock('react-google-charts', () => {
   return {
@@ -13,6 +16,21 @@ vi.mock('react-google-charts', () => {
         loader || `Mock ${chartType} Chart`
       );
     },
+  };
+});
+
+// Mock @react-google-maps/api globally to test components using maps and autocomplete
+vi.mock('@react-google-maps/api', () => {
+  return {
+    useJsApiLoader: () => ({
+      isLoaded: true,
+      loadError: undefined,
+    }),
+    GoogleMap: ({ children }: any) => React.createElement('div', { 'data-testid': 'mock-google-map' }, children),
+    DirectionsRenderer: () => React.createElement('div', { 'data-testid': 'mock-directions-renderer' }),
+    Autocomplete: ({ children }: any) => React.createElement('div', { 'data-testid': 'mock-autocomplete' }, children),
+    MarkerF: () => React.createElement('div', { 'data-testid': 'mock-marker' }),
+    InfoWindowF: ({ children }: any) => React.createElement('div', { 'data-testid': 'mock-info-window' }, children),
   };
 });
 

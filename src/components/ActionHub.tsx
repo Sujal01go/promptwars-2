@@ -101,7 +101,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
   const hasOffsetPurchased = carbonLogs.some(l => l.description.includes('Offset Purchase'));
 
   const badges = [
-    { id: 'starter', name: 'Green Starter', desc: 'Logged first activity', icon: '🌱', unlocked: totalLogs >= 1 },
+    { id: 'starter', name: 'Green Starter', desc: 'Completed first green advocacy task', icon: '🌱', unlocked: totalLogs >= 1 },
     { id: 'transit', name: 'Transit Guardian', desc: 'Logged travel behavior', icon: '🚲', unlocked: hasTravel },
     { id: 'diet', name: 'Eco Gastronomer', desc: 'Logged dietary habits', icon: '🥗', unlocked: hasFood },
     { id: 'energy', name: 'Grid Master', desc: 'Logged energy stats', icon: '⚡', unlocked: hasEnergy },
@@ -196,10 +196,10 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
     <div>
       <div style={{ marginBottom: '30px' }}>
         <h1 className="text-gradient" style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
-          Action Hub & Offset Market
+          Action Hub & Offset Exchange
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
-          Embark on weekly eco-challenges, track your achievement badges, and offset footprint totals via global projects.
+          Embark on community eco-challenges, track your awareness milestones, and offset footprint totals via global projects.
         </p>
       </div>
 
@@ -209,13 +209,13 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
         <div className="glass-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '12px', marginBottom: '15px' }}>
             <Award size={18} className="text-gradient" />
-            <h3 style={{ fontSize: '16px', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Your Eco Badges</h3>
+            <h3 style={{ fontSize: '16px', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Eco-Awareness Milestones</h3>
           </div>
 
           <div className="achievement-grid">
             {badges.map((b) => (
               <div key={b.id} className={`achievement-card ${b.unlocked ? 'unlocked' : 'locked'}`} title={b.desc}>
-                <div className="achievement-icon">
+                <div className="achievement-icon" aria-hidden="true">
                   {b.icon}
                 </div>
                 <span className="achievement-title">{b.name}</span>
@@ -229,7 +229,7 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
         <div className="glass-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(52, 211, 153, 0.15)', paddingBottom: '12px', marginBottom: '15px' }}>
             <Compass size={18} className="text-gradient" />
-            <h3 style={{ fontSize: '16px', fontWeight: 600 }}>Weekly Sustainability Tasks</h3>
+            <h3 style={{ fontSize: '16px', fontWeight: 600 }}>Community Advocacy Tasks</h3>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -271,15 +271,16 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
       <div className="glass-card" style={{ padding: '24px', marginBottom: '30px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '12px', marginBottom: '20px' }}>
           <Leaf size={18} className="text-gradient" />
-          <h3 style={{ fontSize: '18px', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>Global Carbon Offset Exchange</h3>
+          <h3 style={{ fontSize: '18px', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>Community Carbon Offset Register</h3>
         </div>
 
         <div className="transit-layout" style={{ height: 'auto', minHeight: '380px' }}>
           {/* Buying control interface */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="form-group">
-              <label className="form-label">Selected Project</label>
+              <label htmlFor="project-select" className="form-label">Selected Project</label>
               <select 
+                id="project-select"
                 className="form-select" 
                 value={activeProject?.id}
                 onChange={(e) => {
@@ -309,9 +310,10 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
 
             <form onSubmit={handlePurchaseOffset}>
               <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label className="slider-label">Credits to Purchase (Metric Tons)</label>
+                <label htmlFor="offset-credits-input" className="slider-label">Simulated Offset Credits (Tons)</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                   <input 
+                    id="offset-credits-input"
                     type="number" 
                     className="form-group-input" 
                     min={1} 
@@ -328,11 +330,11 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
 
               {purchaseSuccess ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: 'rgba(52,211,153,0.1)', color: 'var(--text-emerald)', borderRadius: '8px', fontSize: '13px', justifyContent: 'center', marginTop: '16px' }}>
-                  <CheckCircle size={16} /> Offset successfully logged! Check your dashboard.
+                  <CheckCircle size={16} /> Ecology contribution registered! Check your dashboard.
                 </div>
               ) : (
                 <button type="submit" className="btn-primary w-full" style={{ justifyContent: 'center', marginTop: '20px' }}>
-                  <DollarSign size={16} /> Purchase Offsets (Reduce CO₂)
+                  <DollarSign size={16} /> Support Global Offset Projects
                 </button>
               )}
             </form>
@@ -410,13 +412,6 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
                 {/* Simulated Radar Markers */}
                 <div style={{ position: 'absolute', zIndex: 1, width: '100%', height: '100%' }}>
                   {OFFSET_PROJECTS.map((proj) => {
-                    // map lat/long simple coordinate projections to local percentages
-                    // Lat is roughly -90 to +90. Lng is roughly -180 to +180.
-                    // Scale Brazilian amazon (-3, -62) to center-left
-                    // Scale West Texas (32, -99) to top-left
-                    // Scale Rajasthan India (27, 72) to top-right
-                    // Scale Oregon (42, -121) to top-left-mid
-                    
                     let topPct = 50;
                     let leftPct = 50;
 
@@ -434,6 +429,16 @@ export const ActionHub: React.FC<ActionHubProps> = ({ carbonLogs, onAddLog, maps
                           setActiveProject(proj);
                           setMapCenter({ lat: proj.lat, lng: proj.lng });
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setActiveProject(proj);
+                            setMapCenter({ lat: proj.lat, lng: proj.lng });
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Select offset project ${proj.name}`}
                         style={{
                           position: 'absolute', top: `${topPct}%`, left: `${leftPct}%`,
                           transform: 'translate(-50%, -50%)', cursor: 'pointer', zIndex: isActive ? 10 : 5

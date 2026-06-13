@@ -66,7 +66,6 @@ const PRESET_SCAN_ITEMS = [
     
 💡 **AI Recommendations:**
 - **Immediate Upgrade**: Retrofit with a 9W LED bulb. LEDs consume 85% less energy and yield equal lumen output.
-- **Financial Payback**: An LED pays for itself in electricity bill savings within 2 months.
 - **Extended Lifespan**: LEDs last 25,000 hours vs. 1,000 hours for incandescent bulbs, reducing electronic waste.`
   }
 ];
@@ -74,11 +73,11 @@ const PRESET_SCAN_ITEMS = [
 export const AICoach: React.FC<AICoachProps> = ({ carbonLogs, geminiApiKey, isDemoMode }) => {
   const [messages, setMessages] = useState<Message[]>(() => {
     const totalEmissions = carbonLogs.reduce((acc, log) => acc + log.emissions, 0);
-    const greeting = `Hi, I am your GreenPulse Sustainability AI Coach! 🌿 
+    const greeting = `Welcome to the GreenPulse Environmental Literacy Center! 🌿 
     
-I've checked your carbon records: you have logged **${totalEmissions.toFixed(1)} kg CO₂** so far. 
+I am your AI Sustainability Educator. Our collective register has recorded **${totalEmissions.toFixed(1)} kg CO₂** in simulated ecological impacts. 
 
-How can I help you adopt green habits today? You can ask me questions about solar panels, diet choices, green commuting, or upload/select an item to scan its carbon impact!`;
+I am here to help you understand global carbon cycles, municipal energy grid architectures, low-impact dietary choices, and waste management practices. How can we expand our environmental awareness today? You can select a preset item below to scan its carbon impact, upload an image, or type a question!`;
 
     return [{ id: '1', sender: 'assistant', text: greeting }];
   });
@@ -101,12 +100,12 @@ How can I help you adopt green habits today? You can ask me questions about sola
     
     // Format carbon log context
     const logSummary = carbonLogs.map(l => `- ${l.date}: ${l.description} (${l.emissions} kg)`).slice(-5).join('\n');
-    const systemPrompt = `You are a sustainability expert coach named GreenPulse Coach. Your goal is to guide the user on reducing their carbon footprint, suggesting sustainable habits, analyzing energy usage, and offering plant-based recipes or ecological tips. Keep your suggestions practical, encouraging, and clear. Use bullet points where appropriate.
+    const systemPrompt = `You are a sustainability educator named GreenPulse AI Guide. Your goal is to teach the user about reducing carbon footprints, proposing sustainable municipal grid plans, explaining the science of ecological cycles, and offering plant-based recipes or waste-reduction suggestions. Keep suggestions educational, inspiring, and scientifically accurate. Use bullet points where appropriate.
     
-    User Carbon Logs Context:
-    Total Logged Emissions: ${carbonLogs.reduce((acc, l) => acc + l.emissions, 0).toFixed(1)} kg.
-    Recent Actions:
-    ${logSummary || 'No actions logged yet.'}
+    Current Community Activity Register Context:
+    Total Registered Emissions: ${carbonLogs.reduce((acc, l) => acc + l.emissions, 0).toFixed(1)} kg.
+    Recent Registered Contributions:
+    ${logSummary || 'No contributions registered yet.'}
     
     Query: ${promptText}`;
 
@@ -268,10 +267,10 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
     <div>
       <div style={{ marginBottom: '30px' }}>
         <h1 className="text-gradient" style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
-          Gemini AI Sustainability Coach
+          Gemini AI Environmental Literacy Guide
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
-          Consult our Google Gemini chatbot on daily emissions reduction, or scan receipts and appliances for eco-audits.
+          Consult our Google Gemini chatbot to learn about greenhouse gas cycles, circular economies, and clean energy transition pathways.
         </p>
       </div>
 
@@ -282,7 +281,7 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Bot size={20} className="text-gradient" />
               <div>
-                <span style={{ fontWeight: '600', fontSize: '15px', display: 'block' }}>GreenPulse AI Coach</span>
+                <span style={{ fontWeight: '600', fontSize: '15px', display: 'block' }}>GreenPulse AI Eco Literacy Educator</span>
                 <span style={{ fontSize: '11px', color: 'var(--text-emerald)' }}>
                   {geminiApiKey && !isDemoMode ? 'Gemini 1.5 Flash Active' : 'Interactive Demo Simulator'}
                 </span>
@@ -296,7 +295,7 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
               <div key={m.id} className={`chat-bubble-card ${m.sender}`}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '11px', color: m.sender === 'user' ? '#030712' : 'var(--text-secondary)', fontWeight: 700, opacity: 0.8 }}>
                   {m.sender === 'user' ? <User size={12} /> : <Bot size={12} className="text-gradient" />}
-                  <span>{m.sender === 'user' ? 'You' : 'Eco Coach'}</span>
+                  <span>{m.sender === 'user' ? 'You' : 'Eco Educator'}</span>
                 </div>
                 
                 {m.image && (
@@ -316,7 +315,7 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
             {isLoading && (
               <div className="chat-bubble-card assistant" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px 20px' }}>
                 <span className="animate-spin" style={{ width: '12px', height: '12px', border: '2px solid var(--accent-emerald)', borderTopColor: 'transparent', borderRadius: '50%' }} />
-                <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>AI is calculating green impact...</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>AI is calculating environmental impact...</span>
               </div>
             )}
             
@@ -332,6 +331,7 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
                 <button 
                   onClick={() => { setSelectedImage(null); setSelectedImageName(null); }}
                   style={{ background: 'none', border: 'none', color: '#ef4444', marginLeft: 'auto', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
+                  aria-label="Remove selected image"
                 >
                   Cancel
                 </button>
@@ -349,19 +349,22 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 disabled={isLoading}
+                aria-label="Ask the AI Eco Educator a question"
               />
-              <label className="image-attach-btn" title="Upload custom photo">
+              <label className="image-attach-btn" title="Upload custom photo" htmlFor="chat-file-upload" style={{ cursor: 'pointer' }}>
                 <Camera size={18} />
                 <input 
+                  id="chat-file-upload"
                   type="file" 
                   accept="image/*" 
                   style={{ display: 'none' }} 
                   onChange={handleFileChange}
                   disabled={isLoading}
+                  aria-label="Upload environmental item image to analyze"
                 />
               </label>
             </div>
-            <button type="submit" className="btn-primary" style={{ borderRadius: '30px', padding: '10px 18px' }} disabled={isLoading}>
+            <button type="submit" className="btn-primary" style={{ borderRadius: '30px', padding: '10px 18px', justifyContent: 'center' }} disabled={isLoading} aria-label="Send message">
               <Send size={15} />
             </button>
           </form>
@@ -372,10 +375,10 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
           <div className="glass-card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <Sparkles size={16} className="text-gradient" />
-              <h4 style={{ fontSize: '14px', fontWeight: 600 }}>Multimodal Scan Demo</h4>
+              <h4 style={{ fontSize: '14px', fontWeight: 600 }}>Multimodal Scan Presets</h4>
             </div>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '14px' }}>
-              Select an item below to load its receipt/photo into the scanner and query Gemini's carbon analysis:
+              Select a preset item below to load its receipt/photo into the scanner and query Gemini's carbon analysis:
             </p>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -383,6 +386,10 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
                 <div 
                   key={item.id}
                   onClick={() => handleSelectPreset(item)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectPreset(item); } }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Select preset item for ${item.name}`}
                   style={{
                     display: 'flex', alignItems: 'center', gap: '10px', padding: '10px',
                     borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)',
@@ -391,7 +398,7 @@ Is there a specific area (travel, food, waste, energy) you would like to tackle 
                     cursor: 'pointer', transition: 'all 0.2s'
                   }}
                 >
-                  <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                  <span style={{ fontSize: '20px' }} aria-hidden="true">{item.icon}</span>
                   <div style={{ textAlign: 'left' }}>
                     <span style={{ fontSize: '13px', fontWeight: '500', display: 'block' }}>{item.name}</span>
                     <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Simulated image scan</span>

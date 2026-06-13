@@ -238,10 +238,10 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
     <div>
       <div style={{ marginBottom: '30px' }}>
         <h1 className="text-gradient" style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
-          Google Maps Travel Emissions Analyzer
+          Google Maps Travel Emissions Simulator
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
-          Compare transportation modalities in real-time, inspect route corridors, and log low-emission credits.
+          Compare transportation modalities in real-time, simulate routes, and examine transit carbon footprints.
         </p>
       </div>
 
@@ -250,17 +250,18 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
         <div className="glass-card transit-sidebar">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(52, 211, 153, 0.15)', paddingBottom: '12px' }}>
             <Navigation size={18} className="text-gradient" />
-            <h3 style={{ fontSize: '16px', fontWeight: 600 }}>Plan Green Commute</h3>
+            <h3 style={{ fontSize: '16px', fontWeight: 600 }}>Transit Scenario Simulation</h3>
           </div>
 
           <div style={{ position: 'relative' }}>
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="origin-input" className="form-label">
                 <MapPin size={14} className="text-gradient" /> Starting Point
               </label>
               {useRealMap && isLoaded ? (
                 <Autocomplete onLoad={onOriginLoad} onPlaceChanged={onOriginPlaceChanged}>
                   <input 
+                    id="origin-input"
                     type="text" 
                     className="form-group-input" 
                     placeholder="Search starting point..." 
@@ -271,6 +272,7 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
               ) : (
                 <>
                   <input 
+                    id="origin-input"
                     type="text" 
                     className="form-group-input" 
                     placeholder="e.g. Stanford Energy Hub, CA" 
@@ -311,12 +313,13 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
 
           <div style={{ position: 'relative' }}>
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="destination-input" className="form-label">
                 <MapPin size={14} style={{ color: 'var(--accent-teal)' }} /> Destination
               </label>
               {useRealMap && isLoaded ? (
                 <Autocomplete onLoad={onDestLoad} onPlaceChanged={onDestPlaceChanged}>
                   <input 
+                    id="destination-input"
                     type="text" 
                     className="form-group-input" 
                     placeholder="Search destination..." 
@@ -327,6 +330,7 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
               ) : (
                 <>
                   <input 
+                    id="destination-input"
                     type="text" 
                     className="form-group-input" 
                     placeholder="e.g. Googleplex, Mountain View, CA" 
@@ -374,14 +378,14 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
             {isLoading ? (
               <span className="flex-center gap-10">
                 <span className="animate-spin" style={{ width: '14px', height: '14px', border: '2px solid #000', borderTopColor: 'transparent', borderRadius: '50%' }} />
-                Mapping routes...
+                Simulating routes...
               </span>
-            ) : 'Analyze Commute'}
+            ) : 'Analyze Transit Impact'}
           </button>
 
           {/* Preset Helper Panel */}
           <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', fontSize: '12px' }}>
-            <span style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Quick Presets (Demo Mode):</span>
+            <span style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Quick Presets (Educational Mode):</span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               <button 
                 className="btn-secondary" 
@@ -407,9 +411,18 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 Distance: <strong style={{ color: 'var(--text-primary)' }}>{distanceText}</strong> | Duration: <strong style={{ color: 'var(--text-primary)' }}>{durationText}</strong>
               </div>
 
-              <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Compare Carbon Footprints:</span>
+              <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Simulated Footprint Comparison:</span>
               
-              <div className={`route-option ${selectedMode === 'suv' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('suv')}>
+              <div 
+                className={`route-option ${selectedMode === 'suv' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('suv')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('suv'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'suv'}
+                aria-label="Gasoline SUV emissions profile"
+              >
                 <div className="route-mode"><Car size={16} style={{ color: '#ef4444' }} /> Gasoline SUV</div>
                 <div className="route-emission">
                   <div className="em-val">+{getEmissions(distanceValue, 'suv').toFixed(1)} kg</div>
@@ -417,7 +430,16 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 </div>
               </div>
 
-              <div className={`route-option ${selectedMode === 'sedan' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('sedan')}>
+              <div 
+                className={`route-option ${selectedMode === 'sedan' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('sedan')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('sedan'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'sedan'}
+                aria-label="Gasoline Sedan emissions profile"
+              >
                 <div className="route-mode"><Car size={16} style={{ color: '#fbbf24' }} /> Gasoline Sedan</div>
                 <div className="route-emission">
                   <div className="em-val">+{getEmissions(distanceValue, 'sedan').toFixed(1)} kg</div>
@@ -425,7 +447,16 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 </div>
               </div>
 
-              <div className={`route-option ${selectedMode === 'electric' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('electric')}>
+              <div 
+                className={`route-option ${selectedMode === 'electric' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('electric')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('electric'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'electric'}
+                aria-label="Electric Car emissions profile"
+              >
                 <div className="route-mode"><Car size={16} style={{ color: '#34d399' }} /> Electric Car</div>
                 <div className="route-emission">
                   <div className="em-val">+{getEmissions(distanceValue, 'electric').toFixed(1)} kg</div>
@@ -433,7 +464,16 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 </div>
               </div>
 
-              <div className={`route-option ${selectedMode === 'bus' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('bus')}>
+              <div 
+                className={`route-option ${selectedMode === 'bus' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('bus')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('bus'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'bus'}
+                aria-label="Transit Bus emissions profile"
+              >
                 <div className="route-mode"><Bus size={16} style={{ color: '#60a5fa' }} /> Transit Bus</div>
                 <div className="route-emission">
                   <div className="em-val">+{getEmissions(distanceValue, 'bus').toFixed(1)} kg</div>
@@ -441,7 +481,16 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 </div>
               </div>
 
-              <div className={`route-option ${selectedMode === 'train' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('train')}>
+              <div 
+                className={`route-option ${selectedMode === 'train' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('train')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('train'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'train'}
+                aria-label="Eco-Train emissions profile"
+              >
                 <div className="route-mode"><Train size={16} style={{ color: '#c084fc' }} /> Eco-Train</div>
                 <div className="route-emission">
                   <div className="em-val">+{getEmissions(distanceValue, 'train').toFixed(1)} kg</div>
@@ -449,7 +498,16 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
                 </div>
               </div>
 
-              <div className={`route-option ${selectedMode === 'bicycle' ? 'best' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setSelectedMode('bicycle')}>
+              <div 
+                className={`route-option ${selectedMode === 'bicycle' ? 'best' : ''}`} 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setSelectedMode('bicycle')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMode('bicycle'); } }}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedMode === 'bicycle'}
+                aria-label="Bicycle or Walking zero emissions profile"
+              >
                 <div className="route-mode"><Bike size={16} style={{ color: 'var(--accent-teal)' }} /> Bicycle / Walk</div>
                 <div className="route-emission">
                   <div className="em-val">0.0 kg</div>
@@ -459,11 +517,11 @@ export const TransitCalculator: React.FC<TransitCalculatorProps> = ({ onAddLog, 
 
               {loggedStatus ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: 'rgba(52,211,153,0.1)', color: 'var(--text-emerald)', borderRadius: '8px', fontSize: '13px', justifyContent: 'center' }}>
-                  <Check size={16} /> Saved to carbon log!
+                  <Check size={16} /> Registered to impact ledger!
                 </div>
               ) : (
                 <button className="btn-primary w-full" onClick={handleLogRoute} style={{ marginTop: '10px', fontSize: '13px', justifyContent: 'center' }}>
-                  <Award size={15} /> Log selected travel mode
+                  <Award size={15} /> Register simulation metrics
                 </button>
               )}
             </div>
